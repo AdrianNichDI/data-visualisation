@@ -10,6 +10,7 @@ let title = "Customer Factors by SHAP (Influence)"
     let categoriesArray = [] 
     let positiveArray = []
 
+    //maps original data, converts to absolute values, and assigns boolean value to weather original value was negative or positive.
     rawData.map((item) =>{
       item.data.map((i) =>{
         let val = i.value
@@ -23,10 +24,12 @@ let title = "Customer Factors by SHAP (Influence)"
     })
 
 
+    //sorts data into descending order based on value
 let sortedData = absoluteData.sort(function(a, b){return b.value-a.value})
 
 let finalData = [{data: dataArray}]
 
+//separates data out into necessary arrays for apexcharts to plot
 sortedData.map((sort) =>{
  dataArray.push(sort.value)
  categoriesArray.push(sort.category)
@@ -43,6 +46,7 @@ class ApexChart extends Component {
           type: 'bar',
           fontFamily: 'Poppins',
         },
+        //defines colour of bars depending on whether original value was negative or positive.
          colors: [function({ value }) {
           const index = dataArray.findIndex((e) => e === value);
           if (positiveArray[index] === true) {
@@ -96,7 +100,6 @@ class ApexChart extends Component {
           fontWeight: 400,
           inverseOrder: false,
           width: undefined,
-          // height: '20%',
           tooltipHoverFormatter: undefined,
           customLegendItems: ['Colour Guide', 'Positive Influence', 'Negative Influence'],
           offsetX: 0,
@@ -116,10 +119,6 @@ class ApexChart extends Component {
               offsetX: 0,
               offsetY: 0
           },
-          // itemMargin: {
-          //     horizontal: 5,
-          //     vertical: 0
-          // },
           onItemClick: {
               toggleDataSeries: true
           },
