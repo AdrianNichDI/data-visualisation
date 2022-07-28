@@ -7,10 +7,16 @@
 
 .apexcharts-legend {
   top: 0 !important;
-  /* border-style: solid; */
+  border-style: solid;
+  box-shadow: 6px 4px 8px lightgray;
+  border-radius: 20px;
+  border-color: lightgray;
   border-width: 1px; 
-  justify-content: center !important;
-  /* height: fit-content; */
+  justify-content:center !important;
+  min-width: 20%;
+  max-height: 20%;
+  margin-top: 20%;
+  padding-left: 5% !important;
 }
 
 

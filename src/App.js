@@ -15,12 +15,14 @@ let title = "Customer Factors by SHAP (Influence)"
       item.data.map((i) =>{
         let val = i.value
         if (val > 0){
-          i.positive = true
+         i.positive = true
         } else i.positive = false
         let absVal = Math.abs(val)
         let object = {category: i.category, value: absVal, positive: i.positive}
         absoluteData.push(object)
+        return null
       })
+      return null
     })
 
 
@@ -34,6 +36,7 @@ sortedData.map((sort) =>{
  dataArray.push(sort.value)
  categoriesArray.push(sort.category)
  positiveArray.push(sort.positive)
+ return null
 })
 
 class ApexChart extends Component {
@@ -47,111 +50,106 @@ class ApexChart extends Component {
           fontFamily: 'Poppins',
         },
         //defines colour of bars depending on whether original value was negative or positive.
-         colors: [function({ value }) {
-          const index = dataArray.findIndex((e) => e === value);
+      colors: [function({ value }) {
+        const index = dataArray.findIndex((e) => e === value);
           if (positiveArray[index] === true) {
               return '#5AC7B6'
           } else {
               return '#DE1E33'
           }
         }],
-          plotOptions: {
-          bar: {
+      plotOptions: {
+        bar: {
             horizontal: true,
           }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        grid:{
-          show: false
-        },
-        yaxis: {
-          decimalsInFloat: 4
-        },
-        xaxis: {
-          title: {
-            text: 'Level Of Influence',
-            style: {
-              fontSize: '20px'
-            },
-          },
-          categories: categoriesArray,
-        },
-        legend: {
-          show: true,
-          style: {
-            dropShadow: {
-              enabled: true,
-              top: 3,
-              left: 3,
-              color: '#000',
-              opacity: 0.35
-            }
-          },
-          showForSingleSeries: true,
-          showForNullSeries: true,
-          showForZeroSeries: true,
-          position: 'right',
-          horizontalAlign: 'center', 
-          floating: true,
-          fontSize: '14px',
-          fontFamily: 'Poppins',
-          fontWeight: 400,
-          inverseOrder: false,
-          width: undefined,
-          tooltipHoverFormatter: undefined,
-          customLegendItems: ['Colour Guide', 'Positive Influence', 'Negative Influence'],
-          offsetX: 0,
-          offsetY: 0,
-          labels: {
-              useSeriesColors: false
-          },
-          markers: {
-              width: 12,
-              height: 12,
-              strokeWidth: 0,
-              strokeColor: '#fff',
-              fillColors: ['#fff', '#5AC7B6', '#DE1E33'],
-              radius: 12,
-              customHTML: undefined,
-              onClick: undefined,
-              offsetX: 0,
-              offsetY: 0
-          },
-          onItemClick: {
-              toggleDataSeries: true
-          },
-          onItemHover: {
-              highlightDataSeries: true
-          },
       },
+      dataLabels: {
+        enabled: false
+      },
+      grid:{
+        show: false
+      },
+      yaxis: {
+        decimalsInFloat: 4
+      },
+      xaxis: {
         title: {
-          text: title,
-          align: 'left',
-          margin: 50,
-          offsetX: 0,
-          offsetY: 0,
-          floating: false,
+          text: 'Level Of Influence',
           style: {
-            fontSize:  '20px',
-            fontWeight:  'bold',
-            color:  '#263238'
+            fontSize: '20px'
           },
+        },
+        tickAmount: 4,
+        categories: categoriesArray,
+      },
+      legend: {
+        show: true,
+        style: {
+        containerMargin: {
+          left: 35,
+          right: 60
+          }
+        },
+        showForSingleSeries: true,
+        showForNullSeries: true,
+        showForZeroSeries: true,
+        position: 'right',
+        horizontalAlign: 'center', 
+        floating: true,
+        fontSize: '14px',
+        fontFamily: 'Poppins',
+        fontWeight: 400,
+        inverseOrder: false,
+        width: undefined,
+        tooltipHoverFormatter: undefined,
+        customLegendItems: ['Colour Guide', 'Positive Influence', 'Negative Influence'],
+        offsetX: 0,
+        offsetY: 0,
+        labels: {
+          useSeriesColors: false
+        },
+        markers: {
+          width: 12,
+          height: 12,
+          strokeWidth: 0,
+          strokeColor: '#fff',
+          fillColors: ['#fff', '#5AC7B6', '#DE1E33'],
+          radius: 12,
+          customHTML: undefined,
+          onClick: undefined,
+          offsetX: 0,
+          offsetY: 0
+        },
+        onItemClick: {
+          toggleDataSeries: true
+        },
+        onItemHover: {
+          highlightDataSeries: true
+        },
+      },
+      title: {
+        text: title,
+        align: 'left',
+        margin: 50,
+        offsetX: 0,
+        offsetY: 0,
+        floating: false,
+        style: {
+          fontSize:  '20px',
+          fontWeight:  'bold',
+          color:  '#263238'
+        },
       }
-       } 
+      } 
     };
   }
-
-
   render() {
-
     return (
-<>     
-<div id="chart">
-<Chart options={this.state.options} series={finalData} type="bar" />
-</div>
-</> 
+      <>     
+      <div id="chart">
+      <Chart options={this.state.options} series={finalData} type="bar" />
+      </div>
+      </> 
     );
   }
 }
