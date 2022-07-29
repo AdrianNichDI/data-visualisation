@@ -1,5 +1,5 @@
 
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Chart from "react-apexcharts";
 import './App.css'
 
@@ -47,161 +47,144 @@ sortedData.map((sort) => {
   return null
 })
 
-
-class ApexChart extends Component {
-  constructor(props) {
-    super(props);
-    this.updateCharts = this.updateCharts.bind(this);
-
-    this.state = {
-      series: [{ data: dataArray }],
-      options: {
-        chart: {
-          type: 'bar',
-          fontFamily: 'Poppins',
-        },
-        //defines colour of bars depending on whether original value was negative or positive.
-        colors: [function ({ value }) {
-          const index = dataArray.findIndex((e) => e === value);
-          if (positiveArray[index] === true) {
-            return '#5AC7B6'
-          } else {
-            return '#DE1E33'
-          }
-        }],
-        plotOptions: {
-          bar: {
-            horizontal: true,
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        grid: {
-          show: false
-        },
-        yaxis: {
-          decimalsInFloat: 4
-        },
-        xaxis: {
-          title: {
-            text: 'Level Of Influence',
-            style: {
-              fontSize: '20px'
-            },
-          },
-          tickAmount: 4,
-          categories: categoriesArray,
-          labels: {
-            formatter: function (val) {
-                return val.toFixed(2);
-              }
-            }
-        },
-        legend: {
-          show: true,
-          style: {
-            containerMargin: {
-              left: 35,
-              right: 60
-            }
-          },
-          showForSingleSeries: true,
-          showForNullSeries: true,
-          showForZeroSeries: true,
-          position: 'right',
-          floating: true,
-          fontSize: '14px',
-          fontFamily: 'Poppins',
-          fontWeight: 400,
-          customLegendItems: ['Colour Guide', 'Positive Influence', 'Negative Influence'],
-          markers: {
-            width: 12,
-            height: 12,
-            strokeWidth: 0,
-            strokeColor: '#fff',
-            fillColors: ['#fff', '#5AC7B6', '#DE1E33'],
-            radius: 12,
-            customHTML: undefined,
-            onClick: undefined,
-            offsetX: 0,
-            offsetY: 0
-          },
-          onItemHover: {
-            highlightDataSeries: true
-          },
-        },
-        title: {
-          text: title,
-          align: 'left',
-          margin: 50,
-          offsetX: 0,
-          offsetY: 0,
-          floating: false,
-          style: {
-            fontSize: '20px',
-            fontWeight: 'bold',
-            color: '#263238'
-          },
-        }
-      },
-      // 
-      updatedSeries: {
-        series: [{ data: defaultData }],
-      }
-     };
-  }
-
-  updateCharts() {
-    let search = "Change"
-    if (this.state.options.xaxis.title.text.includes(search)) {
-      console.log("true")
-     return this.setState({
-        options: this.state.options,
-        series: this.state.series
-      })
+let initialOptions = {
+  series: [{ data: dataArray }],
+  chart: {
+    type: 'bar',
+    fontFamily: 'Poppins',
+  },
+  //defines colour of bars depending on whether original value was negative or positive.
+  colors: [function ({ value }) {
+    const index = dataArray.findIndex((e) => e === value);
+    if (positiveArray[index] === true) {
+      return '#5AC7B6'
     } else {
-      console.log("false")
-      return this.setState({
-       options: { ...this.state.options,
-        xaxis: {
-          ...this.state.options.xaxis,
-          title: {
+      return '#DE1E33'
+    }
+  }],
+  plotOptions: {
+    bar: {
+      horizontal: true,
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  grid: {
+    show: false
+  },
+  yaxis: {
+    decimalsInFloat: 4
+  },
+  xaxis: {
+    title: {
+      text: 'Level Of Influence',
+      style: {
+        fontSize: '20px'
+      },
+    },
+    tickAmount: 4,
+    categories: categoriesArray,
+    labels: {
+      formatter: function (val) {
+        return val.toFixed(2);
+      }
+    }
+  },
+  legend: {
+    show: true,
+    style: {
+      containerMargin: {
+        left: 35,
+        right: 60
+      }
+    },
+    showForSingleSeries: true,
+    showForNullSeries: true,
+    showForZeroSeries: true,
+    position: 'right',
+    floating: true,
+    fontSize: '14px',
+    fontFamily: 'Poppins',
+    fontWeight: 400,
+    customLegendItems: ['Colour Guide', 'Positive Influence', 'Negative Influence'],
+    markers: {
+      width: 12,
+      height: 12,
+      strokeWidth: 0,
+      strokeColor: '#fff',
+      fillColors: ['#fff', '#5AC7B6', '#DE1E33'],
+      radius: 12,
+      customHTML: undefined,
+      onClick: undefined,
+      offsetX: 0,
+      offsetY: 0
+    },
+    onItemHover: {
+      highlightDataSeries: true
+    },
+  },
+  title: {
+    text: title,
+    align: 'left',
+    margin: 50,
+    offsetX: 0,
+    offsetY: 0,
+    floating: false,
+    style: {
+      fontSize: '20px',
+      fontWeight: 'bold',
+      color: '#263238'
+    },
+  }
+}
+
+function App() {
+  let [absolute, setAbsolute] = useState(true)
+  let [options, setOptions] = useState(initialOptions)
+  
+  const updateCharts = () => {
+    if (absolute === false) {
+      setAbsolute(true)
+      setOptions(initialOptions)
+    } else {
+      setAbsolute(false)
+      setOptions({
+        ...options, series: [{ data: defaultData }], xaxis: {
+          ...options.xaxis, title: {
             text: 'Change In Level Of Influence',
             style: {
               fontSize: '20px'
             },
           },
         },
-        legend: {
-          ...this.state.options.legend,
-          customLegendItems: ['Why do we measure this?', 'As our approach to retention and products change, so to will our customers and their needs.', 'If a significant shift is detected, the model may adapt accordingly.'],
-          markers: {
-            ...this.state.options.legend.markers,
-            fillColors: ['#fff', '#fff', '#fff'],
-          }
-
-        },
-          colors: ['#5AC7B6'], 
-        },
-        series: this.state.updatedSeries.series
-      });
+          legend: {
+            ...options.legend,
+            customLegendItems: ['Why do we measure this?', 'As our approach to retention and products change, so to will our customers and their needs.', 'If a significant shift is detected, the model may adapt accordingly.'],
+            markers: {
+              ...options.legend.markers,
+              fillColors: ['#fff', '#fff', '#fff'],
+            }
+          },
+        colors: ['#5AC7B6'],
+      })
     }
   }
 
-  render() {
-    return (
-      <>
-        <div id="chart">
-          <Chart options={this.state.options} series={this.state.series} type="bar" />
-        </div>
-        <p className="col">
-          <button onClick={this.updateCharts}>Make It Change!</button>
-        </p>
-      </>
-    );
-  }
+  return (
+    <>
+      <div id="chart">
+        <Chart options={options} series={options.series} type="bar" />
+      </div>
+      <p className="col">
+        <button onClick={updateCharts}>Make It Change!</button>
+      </p>
+    </>
+  );
+
 }
-export default ApexChart
+
+
+export default App
 
 
