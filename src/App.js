@@ -10,9 +10,8 @@ let dataArray = []
 let categoriesArray = []
 let positiveArray = []
 let defaultData = []
-// let newArray = []
 
-//maps original data, converts to absolute values, and assigns boolean value to weather original value was negative or positive.
+//maps original data, converts to absolute values, and assigns boolean value to whether original value was negative or positive.
 rawData.map((item) => {
   item.data.map((i) => {
     let val = i.value
@@ -39,9 +38,6 @@ absoluteData.map((item) => {
     return defaultData.push(-item.value)
   }
 })
-
-let finalAbsData = [{ data: dataArray }]
-let finalDefData = [{ data: defaultData }]
 
 //separates data out into necessary arrays for apexcharts to plot
 sortedData.map((sort) => {
@@ -96,6 +92,11 @@ class ApexChart extends Component {
           },
           tickAmount: 4,
           categories: categoriesArray,
+          labels: {
+            formatter: function (val) {
+                return val.toFixed(2);
+              }
+            }
         },
         legend: {
           show: true,
@@ -109,20 +110,11 @@ class ApexChart extends Component {
           showForNullSeries: true,
           showForZeroSeries: true,
           position: 'right',
-          horizontalAlign: 'center',
           floating: true,
           fontSize: '14px',
           fontFamily: 'Poppins',
           fontWeight: 400,
-          inverseOrder: false,
-          width: undefined,
-          tooltipHoverFormatter: undefined,
           customLegendItems: ['Colour Guide', 'Positive Influence', 'Negative Influence'],
-          offsetX: 0,
-          offsetY: 0,
-          labels: {
-            useSeriesColors: false
-          },
           markers: {
             width: 12,
             height: 12,
@@ -135,9 +127,6 @@ class ApexChart extends Component {
             offsetX: 0,
             offsetY: 0
           },
-          onItemClick: {
-            toggleDataSeries: true
-          },
           onItemHover: {
             highlightDataSeries: true
           },
@@ -156,120 +145,48 @@ class ApexChart extends Component {
           },
         }
       },
-      updated: {
-        chart: {
-          type: 'bar',
-          fontFamily: 'Poppins',
-        },
-        //defines colour of bars depending on whether original value was negative or positive.
-        colors: ['#5AC7B6'],
-        plotOptions: {
-          bar: {
-            horizontal: true,
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        grid: {
-          show: false
-        },
-        yaxis: {
-          decimalsInFloat: 4
-        },
+      // 
+      updatedSeries: {
+        series: [{ data: defaultData }],
+      }
+     };
+  }
+
+  updateCharts() {
+    let search = "Change"
+    if (this.state.options.xaxis.title.text.includes(search)) {
+      console.log("true")
+     return this.setState({
+        options: this.state.options,
+        series: this.state.series
+      })
+    } else {
+      console.log("false")
+      return this.setState({
+       options: { ...this.state.options,
         xaxis: {
+          ...this.state.options.xaxis,
           title: {
             text: 'Change In Level Of Influence',
             style: {
               fontSize: '20px'
             },
           },
-          tickAmount: 4,
-          categories: categoriesArray,
         },
         legend: {
-          show: true,
-          style: {
-            position: 'bottom',
-            containerMargin: {
-              left: 35,
-              right: 60
-            }
-          },
-          showForSingleSeries: true,
-          showForNullSeries: true,
-          showForZeroSeries: true,
-          position: 'right',
-          horizontalAlign: 'center',
-          floating: true,
-          fontSize: '14px',
-          fontFamily: 'Poppins',
-          fontWeight: 400,
-          inverseOrder: false,
-          width: undefined,
-          tooltipHoverFormatter: undefined,
+          ...this.state.options.legend,
           customLegendItems: ['Why do we measure this?', 'As our approach to retention and products change, so to will our customers and their needs.', 'If a significant shift is detected, the model may adapt accordingly.'],
-          offsetX: 0,
-          offsetY: 0,
-          labels: {
-            useSeriesColors: false
-          },
           markers: {
-            width: 12,
-            height: 12,
-            strokeWidth: 0,
-            strokeColor: '#fff',
+            ...this.state.options.legend.markers,
             fillColors: ['#fff', '#fff', '#fff'],
-            radius: 12,
-            customHTML: undefined,
-            onClick: undefined,
-            offsetX: 0,
-            offsetY: 0
-          },
-          onItemClick: {
-            toggleDataSeries: true
-          },
-          onItemHover: {
-            highlightDataSeries: true
-          },
-        },
-        title: {
-          text: title,
-          align: 'left',
-          margin: 50,
-          offsetX: 0,
-          offsetY: 0,
-          floating: false,
-          style: {
-            fontSize: '20px',
-            fontWeight: 'bold',
-            color: '#263238'
-          },
-        }
-      },
-      updatedSeries: {
-        series: [{ data: defaultData }],
-      }
-      // updateCharts:{
-      //   ...this.state.options, colors:['#5AC7B6']
-      // },
-    };
-  }
+          }
 
-  updateCharts() {
-    let search = "Change"
-    if (this.state.options.xaxis.title.text.includes(search)) {
-      this.setState({
-        options: this.state.options,
-        series: this.state.series
-      })
-    } else {
-      this.setState({
-        options: this.state.updated,
+        },
+          colors: ['#5AC7B6'], 
+        },
         series: this.state.updatedSeries.series
       });
     }
-    console.log(this.state.options.xaxis.title.text)
   }
 
   render() {
