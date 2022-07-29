@@ -9,6 +9,8 @@ let title = "Customer Factors by SHAP (Influence)"
     let dataArray = []
     let categoriesArray = [] 
     let positiveArray = []
+    let defaultData = []
+    // let newArray = []
 
     //maps original data, converts to absolute values, and assigns boolean value to weather original value was negative or positive.
     rawData.map((item) =>{
@@ -29,7 +31,17 @@ let title = "Customer Factors by SHAP (Influence)"
     //sorts data into descending order based on value
 let sortedData = absoluteData.sort(function(a, b){return b.value-a.value})
 
-let finalData = [{data: dataArray}]
+
+absoluteData.map((item) =>{
+if (item.positive === true) {
+ return defaultData.push(item.value)
+} else{
+  return defaultData.push(-item.value)
+}
+ })
+
+let finalAbsData = [{data: dataArray}]
+let finalDefData = [{data: defaultData}]
 
 //separates data out into necessary arrays for apexcharts to plot
 sortedData.map((sort) =>{
@@ -39,11 +51,14 @@ sortedData.map((sort) =>{
  return null
 })
 
+
 class ApexChart extends Component {
   constructor(props) {
     super(props);
-    
+    this.updateCharts = this.updateCharts.bind(this);
+   
     this.state = {
+      series: [{data: dataArray}],
       options: {
         chart: {
           type: 'bar',
@@ -140,15 +155,123 @@ class ApexChart extends Component {
           color:  '#263238'
         },
       }
-      } 
+      },
+      updated: {
+        chart: {
+          type: 'bar',
+          fontFamily: 'Poppins',
+        },
+        //defines colour of bars depending on whether original value was negative or positive.
+      colors: ['#5AC7B6'],
+      plotOptions: {
+        bar: {
+            horizontal: true,
+          }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      grid:{
+        show: false
+      },
+      yaxis: {
+        decimalsInFloat: 4
+      },
+      xaxis: {
+        title: {
+          text: 'Change In Level Of Influence',
+          style: {
+            fontSize: '20px'
+          },
+        },
+        tickAmount: 4,
+        categories: categoriesArray,
+      },
+      legend: {
+        show: true,
+        style: {
+        position: 'bottom',
+        containerMargin: {
+          left: 35,
+          right: 60
+          }
+        },
+        showForSingleSeries: true,
+        showForNullSeries: true,
+        showForZeroSeries: true,
+        position: 'right',
+        horizontalAlign: 'center', 
+        floating: true,
+        fontSize: '14px',
+        fontFamily: 'Poppins',
+        fontWeight: 400,
+        inverseOrder: false,
+        width: undefined,
+        tooltipHoverFormatter: undefined,
+        customLegendItems: ['Why do we measure this?', 'As our approach to retention and products change, so to will our customers and their needs.', 'If a significant shift is detected, the model may adapt accordingly.'],
+        offsetX: 0,
+        offsetY: 0,
+        labels: {
+          useSeriesColors: false
+        },
+        markers: {
+          width: 12,
+          height: 12,
+          strokeWidth: 0,
+          strokeColor: '#fff',
+          fillColors: ['#fff', '#fff', '#fff'],
+          radius: 12,
+          customHTML: undefined,
+          onClick: undefined,
+          offsetX: 0,
+          offsetY: 0
+        },
+        onItemClick: {
+          toggleDataSeries: true
+        },
+        onItemHover: {
+          highlightDataSeries: true
+        },
+      },
+      title: {
+        text: title,
+        align: 'left',
+        margin: 50,
+        offsetX: 0,
+        offsetY: 0,
+        floating: false,
+        style: {
+          fontSize:  '20px',
+          fontWeight:  'bold',
+          color:  '#263238'
+        },
+      }
+      },
+      updatedSeries:{
+        series: [{data: defaultData}],
+      }
+      // updateCharts:{
+      //   ...this.state.options, colors:['#5AC7B6']
+      // },
     };
   }
+
+  updateCharts(){
+    this.setState({
+      options: this.state.updated,
+      series: this.state.updatedSeries.series
+    });
+  }
+
   render() {
     return (
       <>     
       <div id="chart">
-      <Chart options={this.state.options} series={finalData} type="bar" />
+      <Chart options={this.state.options} series={this.state.series} type="bar" />
       </div>
+      <p className="col">
+            <button onClick={this.updateCharts}>Update!</button>
+      </p>
       </> 
     );
   }
