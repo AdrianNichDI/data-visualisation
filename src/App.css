@@ -1,11 +1,41 @@
 @import url(https://fonts.googleapis.com/css?family=Poppins);
 
+
+#outer{
+  position: absolute;
+}
 #chart {
+  position: relative;
+  z-index: -1;
   max-width: 70%;
   margin: 35px auto;
 }
 
+#reason{
+  z-index: 10;
+  position: absolute;
+  font-family: 'Poppins';
+  font-size: 14px;
+  border-style: solid;
+  height: 170px;
+  width: 350px;
+  padding: 15px;
+  box-shadow: 6px 4px 8px lightgray;
+  border-radius: 20px;
+  border-color: lightgray;
+  border-width: 1px; 
+  margin-top: 335px;
+  margin-left: 750px;
+}
+
+#button{
+  position: absolute;
+  z-index: 1;
+  margin-top: 720px;
+  margin-left: 100px;
+}
 .apexcharts-legend {
+  position: relative;
   top: 0 !important;
   border-style: solid;
   box-shadow: 6px 4px 8px lightgray;
@@ -15,8 +45,10 @@
   justify-content:center !important;
   min-width: 20%;
   max-height: 20%;
-  margin-top: 20%;
+  margin-top: 335px;
+  margin-left: 750px;
   padding-left: 5% !important;
+  font-size: 14px;
 }
 
 

@@ -142,7 +142,7 @@ let initialOptions = {
 function App() {
   let [absolute, setAbsolute] = useState(true)
   let [options, setOptions] = useState(initialOptions)
-  
+
   const updateCharts = () => {
     if (absolute === false) {
       setAbsolute(true)
@@ -158,14 +158,15 @@ function App() {
             },
           },
         },
-          legend: {
-            ...options.legend,
-            customLegendItems: ['Why do we measure this?', 'As our approach to retention and products change, so to will our customers and their needs.', 'If a significant shift is detected, the model may adapt accordingly.'],
-            markers: {
-              ...options.legend.markers,
-              fillColors: ['#fff', '#fff', '#fff'],
-            }
-          },
+        legend: {
+          ...options.legend,
+          show: false,
+          customLegendItems: ['Why do we measure this?', 'As our approach to retention and products change, so to will our customers and their needs.', 'If a significant shift is detected, the model may adapt accordingly.'],
+          markers: {
+            ...options.legend.markers,
+            fillColors: ['#fff', '#fff', '#fff'],
+          }
+        },
         colors: ['#5AC7B6'],
       })
     }
@@ -173,12 +174,20 @@ function App() {
 
   return (
     <>
-      <div id="chart">
-        <Chart options={options} series={options.series} type="bar" />
+      <div id="button">
+        {/* <p className="col"> */}
+          <button onClick={updateCharts}>Make It Change!</button>
+        {/* </p> */}
       </div>
-      <p className="col">
-        <button onClick={updateCharts}>Make It Change!</button>
-      </p>
+      <div id="outer">
+        <div id="chart">
+          <Chart options={options} series={options.series} width={"976"} height={"735"} type="bar" />
+        </div>
+      </div>
+      {!absolute ? <div id="reason">
+        <h3>Why do we measure this?</h3>
+        <p>As our approach to retention and products change, so to will our customers and their needs. If a significant shift is detected, the model may adapt accordingly.</p>
+      </div> : <div></div>}
     </>
   );
 
