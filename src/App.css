@@ -28,30 +28,54 @@
   margin-left: 750px;
 }
 
-#button{
+#rows{
   position: absolute;
   z-index: 1;
-  margin-top: 720px;
-  margin-left: 100px;
+  margin-top: 730px;
+  margin-left: 250px;
+  height: 50px;
+  width: 50px;
+}
+
+#spread{
+  position: absolute;
+  z-index: 1;
+  margin-top: 730px;
+  margin-left: 180px;
+  height: 50px;
+  width: 50px;
+}
+
+.button{
+  height: 50px;
+  width: 50px;
 }
 .apexcharts-legend {
-  position: relative;
   top: 0 !important;
   border-style: solid;
   box-shadow: 6px 4px 8px lightgray;
   border-radius: 20px;
   border-color: lightgray;
   border-width: 1px; 
-  justify-content:center !important;
+  justify-content: center !important;
   min-width: 20%;
   max-height: 20%;
   margin-top: 335px;
   margin-left: 750px;
   padding-left: 5% !important;
+  padding-top: 2% !important;
   font-size: 14px;
 }
 
-
+#legend-title{
+  z-index: 10;
+  position: absolute;
+  justify-content: center;
+  margin-top: 385px;
+  margin-left: 920px;
+  font-size: 18px;
+  font-weight: bold;
+}
 
 .App {
   text-align: center;

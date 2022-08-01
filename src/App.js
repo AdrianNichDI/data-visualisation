@@ -1,6 +1,8 @@
 
 import React, { useState } from "react";
 import Chart from "react-apexcharts";
+import { ReactComponent as ShapRows } from './images/shap-rows.svg';
+import { ReactComponent as ShapSpread } from './images/shap-spread.svg';
 import './App.css'
 
 let title = "Customer Factors by SHAP (Influence)"
@@ -10,6 +12,8 @@ let dataArray = []
 let categoriesArray = []
 let positiveArray = []
 let defaultData = []
+let red = 'rgba(222, 30, 51, 1)';
+let grey = 'rgba(211, 211, 211)';
 
 //maps original data, converts to absolute values, and assigns boolean value to whether original value was negative or positive.
 rawData.map((item) => {
@@ -80,7 +84,7 @@ let initialOptions = {
     title: {
       text: 'Level Of Influence',
       style: {
-        fontSize: '20px'
+        fontSize: '20px',
       },
     },
     tickAmount: 4,
@@ -107,13 +111,13 @@ let initialOptions = {
     fontSize: '14px',
     fontFamily: 'Poppins',
     fontWeight: 400,
-    customLegendItems: ['Colour Guide', 'Positive Influence', 'Negative Influence'],
+    customLegendItems: ['Positive Influence', 'Negative Influence'],
     markers: {
       width: 12,
       height: 12,
       strokeWidth: 0,
       strokeColor: '#fff',
-      fillColors: ['#fff', '#5AC7B6', '#DE1E33'],
+      fillColors: ['#5AC7B6', '#DE1E33'],
       radius: 12,
       customHTML: undefined,
       onClick: undefined,
@@ -161,11 +165,6 @@ function App() {
         legend: {
           ...options.legend,
           show: false,
-          customLegendItems: ['Why do we measure this?', 'As our approach to retention and products change, so to will our customers and their needs.', 'If a significant shift is detected, the model may adapt accordingly.'],
-          markers: {
-            ...options.legend.markers,
-            fillColors: ['#fff', '#fff', '#fff'],
-          }
         },
         colors: ['#5AC7B6'],
       })
@@ -174,20 +173,31 @@ function App() {
 
   return (
     <>
-      <div id="button">
-        {/* <p className="col"> */}
-          <button onClick={updateCharts}>Make It Change!</button>
-        {/* </p> */}
-      </div>
       <div id="outer">
         <div id="chart">
           <Chart options={options} series={options.series} width={"976"} height={"735"} type="bar" />
         </div>
       </div>
-      {!absolute ? <div id="reason">
-        <h3>Why do we measure this?</h3>
-        <p>As our approach to retention and products change, so to will our customers and their needs. If a significant shift is detected, the model may adapt accordingly.</p>
-      </div> : <div></div>}
+      {!absolute ?
+        <>
+          <div id="spread">
+            <ShapRows fill={red} stroke={red} onClick={updateCharts} />
+          </div>
+          <div id="rows">
+            <ShapSpread fill={grey} stroke={grey} />
+          </div>
+          <div id="reason">
+            <h3>Why do we measure this?</h3>
+            <p>As our approach to retention and products change, so to will our customers and their needs. If a significant shift is detected, the model may adapt accordingly.</p>
+          </div> </> : <>
+          <div id="spread">
+            <ShapRows fill={grey} stroke={grey} />
+          </div>
+          <div id="rows">
+            <ShapSpread fill={red} stroke={red} onClick={updateCharts} />
+          </div>
+          < div id="legend-title"><p>Colour Guide</p></div>
+          </>}
     </>
   );
 
